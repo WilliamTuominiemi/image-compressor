@@ -1,16 +1,12 @@
-use image::{GenericImageView, ImageError, ImageReader};
+use image::{ImageError, ImageReader};
 
 fn main() -> Result<(), ImageError> {
     let img = ImageReader::open("photo.jpeg")?.decode()?;
-    println!("Dimensions: {} x {}", img.width(), img.height());
+    let rgb = img.into_rgb16();
 
-    for (x, y, pixel) in img.pixels() {
-        let rgba = pixel.0;
-        println!(
-            "Pixel at ({}, {}): Red={}, Green={}, Blue={}, Alpha={}",
-            x, y, rgba[0], rgba[1], rgba[2], rgba[3]
-        );
-    }
+    println!("Dimensions: {} x {}", rgb.width(), rgb.height());
+
+    println!("{:?}", rgb);
 
     Ok(())
 }
