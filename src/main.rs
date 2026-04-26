@@ -2,11 +2,14 @@ use image::{ImageError, ImageReader};
 
 fn main() -> Result<(), ImageError> {
     let img = ImageReader::open("photo.jpeg")?.decode()?;
-    let rgb = img.into_rgb16();
+    let mut rgb = img.into_rgb16();
 
-    println!("Dimensions: {} x {}", rgb.width(), rgb.height());
+    for (x, y, pixel) in rgb.enumerate_pixels_mut() {
+        pixel.0[2] = 0;
+        pixel.0[0] = pixel.0[0].saturating_add(5000);
+    }
 
-    println!("{:?}", rgb);
+    rgb.save("altered_photo.png")?;
 
     Ok(())
 }
